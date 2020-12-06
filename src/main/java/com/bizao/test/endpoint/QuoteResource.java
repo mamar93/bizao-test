@@ -2,8 +2,10 @@ package com.bizao.test.endpoint;
 
 
 import com.bizao.test.dto.request.CheapestQuoteRequestDTO;
+import com.bizao.test.dto.response.BasicResponse;
 import com.bizao.test.dto.response.CheapestQuoteResponseDTO;
 import com.bizao.test.service.QuoteService;
+import com.bizao.test.utils.WsMessage;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.ws.rs.BeanParam;
+import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,8 +39,8 @@ public class QuoteResource {
             @ApiResponse(responseCode = "500", description = "Internal error")})
     public ResponseEntity<?> getCheapestQuote(@Valid @BeanParam CheapestQuoteRequestDTO requestDTO) {
         CheapestQuoteResponseDTO cheapestQuoteResponseDTO = quoteService.getCheapestQuote(requestDTO);
-        Map<String, Object> map = new HashMap<>();
-        map.put("data", cheapestQuoteResponseDTO);
-        return ResponseEntity.ok(map);
+        BasicResponse response = new BasicResponse(WsMessage.WS_SUCCESS);
+        response.setData(cheapestQuoteResponseDTO);
+        return ResponseEntity.ok(response);
     }
 }
